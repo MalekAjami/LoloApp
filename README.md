@@ -1,42 +1,33 @@
 # LoloApp
 
-Offline-first flashcard trainer for vocabulary study.
+LoloApp is a lightweight flashcard trainer for vocabulary study, designed for students and especially suitable for short study sessions on desktop or mobile.
 
-## Current features (v1.3)
+## Current features
 
 - English → Unité 1 with 119 cards
 - FR → EN and EN → FR directions
-- Study modes:
-  - packs of 10, 20 or 30 cards
-  - the whole unit
-  - difficult cards ranked from the learner's error history
-- A full-unit random order is created once per study cycle, then split into non-overlapping packs
-- Pack navigation and next-pack flow
-- Optional “Nouveau mélange de l’unité” starts a fresh randomized cycle
-- `Je sais` / `Je ne sais pas` piles
+- Study packs of 10, 20 or 30 cards, or the whole unit
+- One randomized full-unit cycle split into non-overlapping packs
+- `Je sais` / `Je ne sais pas` card piles
 - Retry only missed cards
 - First-pass score kept separate from later mastery
 - Unit-wide mastery progress
-- Per-card error history saved locally and used for difficult-card review
-- Sound, animation, streak and lightweight motivational feedback
-- Keyboard controls: Space flips; ← / → answer after flipping
-- Works directly from `index.html` via `file://` — no server required
-- Progress stored locally when the browser permits localStorage
+- Difficult-card review based on the learner's error history
+- Sound, animation, streaks and lightweight motivational feedback
+- Progress stored locally in the browser
+- Responsive layout for desktop and mobile
 
-## Run
+## GitHub Pages
 
-Unzip the folder and double-click `index.html`.
+The repository root is ready to be published directly with GitHub Pages from the `main` branch and `/ (root)` folder.
 
-## Structure
+## Main files
 
-- `src/data/` vocabulary catalog and units
-- `src/logic.js` pure study/session logic
-- `src/app.js` UI/state controller source
-- `src/app.bundle.js` offline browser bundle loaded by `index.html`
-- `tests/logic.test.mjs` unit tests for scoring, packs and difficult-card ranking
+- `index.html` — application shell
+- `src/runtime-data.js` — vocabulary, study logic, audio and feedback data
+- `src/runtime-app-state.js` — application state and rendering
+- `src/runtime-app-actions.js` — interactions and session actions
+- `src/styles-1.css` … `src/styles-4.css` — responsive UI styles
+- `assets/favicon.svg` — app icon
 
-## Test
-
-```bash
-node tests/logic.test.mjs
-```
+The app has no backend and does not require a build step to run on GitHub Pages.
