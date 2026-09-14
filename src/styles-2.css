@@ -5,8 +5,8 @@
 .shadow-card-2 { transform: translateY(12px) scale(.955) rotate(2.2deg); opacity: .48; }
 .shadow-card-1 { transform: translateY(6px) scale(.98) rotate(-.8deg); opacity: .7; }
 
-.flashcard { padding: 0; border: 0; background: transparent; cursor: pointer; z-index: 5; transform-style: preserve-3d; transition: transform .28s ease, opacity .28s ease; }
-.card-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .58s cubic-bezier(.2,.72,.16,1); }
+.flashcard { padding: 0; border: 0; background: transparent; cursor: pointer; z-index: 5; transform-style: preserve-3d; transition: transform .19s ease, opacity .19s ease; }
+.card-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .34s cubic-bezier(.2,.72,.16,1); }
 .flashcard.is-flipped .card-inner { transform: rotateY(180deg); }
 .card-face {
   position: absolute; inset: 0; backface-visibility: hidden; border-radius: 28px; padding: 30px;
