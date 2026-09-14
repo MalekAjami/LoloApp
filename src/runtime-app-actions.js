@@ -73,7 +73,7 @@ function answer(knowsIt) {
   if (knowsIt && nextSession.streak > 0 && nextSession.streak % 5 === 0) celebrate();
 
   elements.flashcard.classList.add(knowsIt ? 'throw-right' : 'throw-left');
-  const delay = state.settings.animations ? 310 : 20;
+  const delay = state.settings.animations ? 200 : 20;
 
   setTimeout(() => {
     state.session = nextSession;
@@ -229,4 +229,3 @@ document.addEventListener('keydown', (event) => {
 });
 
 render();
-
