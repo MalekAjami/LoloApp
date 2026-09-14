@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#151728" />
+    <meta name="description" content="LoloApp — cartes interactives pour mémoriser du vocabulaire." />
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./src/styles.css" />
+    <title>LoloApp</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navigation des langues">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">LA</div>
+          <div>
+            <div class="brand-name">LoloApp</div>
+            <div class="brand-subtitle">Apprendre. Retourner. Retenir.</div>
+          </div>
+        </div>
+
+        <nav class="language-tree" id="languageTree"></nav>
+
+        <div class="sidebar-note">
+          <span aria-hidden="true">💡</span>
+          <p>Travaille par petits paquets, puis reviens sur les cartes qui résistent le plus.</p>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="breadcrumb">English · Unité 1</p>
+            <h1 id="unitTitle">Unité 1</h1>
+            <p class="scope-summary" id="scopeSummary">Choisis comment tu veux travailler.</p>
+          </div>
+
+          <div class="topbar-actions">
+            <button class="direction-toggle" id="directionToggle" type="button" aria-label="Inverser le sens des cartes">
+              <span id="directionLabel">FR → EN</span>
+              <span class="swap-icon" aria-hidden="true">⇄</span>
+            </button>
+            <button class="icon-button" id="soundToggle" type="button" aria-label="Activer ou couper le son">🔊</button>
+            <button class="icon-button" id="animationToggle" type="button" aria-label="Activer ou réduire les animations">✨</button>
+          </div>
+        </header>
+
+        <section class="stats-strip" id="statsStrip" aria-label="Progression" hidden>
+          <div class="stat-chip neutral">
+            <span class="stat-label">Passage</span>
+            <strong id="passNumber">1</strong>
+          </div>
+          <div class="stat-chip neutral wide">
+            <span class="stat-label">Progression</span>
+            <strong id="progressText">Carte 1 / 1</strong>
+          </div>
+          <div class="stat-chip danger">
+            <span class="stat-dot"></span>
+            <span class="stat-label">À revoir</span>
+            <strong id="missedCount">0</strong>
+          </div>
+          <div class="stat-chip success">
+            <span class="stat-dot"></span>
+            <span class="stat-label">Je sais</span>
+            <strong id="knownCount">0</strong>
+          </div>
+        </section>
+
+        <section class="study-stage" aria-live="polite">
+          <div class="pile-zone pile-zone-left" id="leftPileZone" aria-label="Pile Je ne sais pas" hidden>
+            <div class="pile-label">Je ne sais pas</div>
+            <div class="mini-pile danger-pile" id="leftPile" aria-hidden="true"></div>
+            <div class="pile-count" id="leftPileCount">0 carte</div>
+          </div>
+
+          <div class="deck-area">
+            <section class="setup-panel" id="setupPanel">
+              <div class="setup-icon" aria-hidden="true">🃏</div>
+              <p class="eyebrow">Préparer la session</p>
+              <h2>Choisis ton rythme</h2>
+              <p class="setup-copy">Les petits paquets évitent de transformer 119 cartes en marathon.</p>
+
+              <div class="mode-grid" role="group" aria-label="Mode d'étude">
+                <button class="mode-card active" data-study-mode="pack" type="button">
+                  <span class="mode-emoji">📚</span>
+                  <strong>Par paquets</strong>
+                  <small>10, 20 ou 30 cartes à la fois</small>
+                </button>
+                <button class="mode-card" data-study-mode="all" type="button">
+                  <span class="mode-emoji">⚡</span>
+                  <strong>Toute l’unité</strong>
+                  <small>Les 119 cartes en une fois</small>
+                </button>
+                <button class="mode-card" data-study-mode="weak" id="weakModeButton" type="button">
+                  <span class="mode-emoji">🎯</span>
+                  <strong>Cartes difficiles</strong>
+                  <small id="weakModeHint">Aucune erreur enregistrée</small>
+                </button>
+              </div>
+
+              <div class="setup-options" id="packOptions">
+                <span class="option-label">Taille du paquet</span>
+                <div class="choice-row" id="packSizeChoices">
+                  <button class="choice-chip" data-pack-size="10" type="button">10</button>
+                  <button class="choice-chip active" data-pack-size="20" type="button">20</button>
+                  <button class="choice-chip" data-pack-size="30" type="button">30</button>
+                </div>
+
+                <div class="pack-picker">
+                  <button class="pack-nav" id="prevPackButton" type="button" aria-label="Paquet précédent">←</button>
+                  <div>
+                    <strong id="packPickerTitle">Paquet 1 / 6</strong>
+                    <small id="packPickerRange">20 cartes · mélange fixe pour ce cycle</small>
+                  </div>
+                  <button class="pack-nav" id="nextPackButton" type="button" aria-label="Paquet suivant">→</button>
+                </div>
+                <button class="cycle-button" id="newCycleButton" type="button">🔀 Nouveau mélange de l’unité</button>
+              </div>
+
+              <div class="setup-options" id="weakOptions" hidden>
+                <span class="option-label">Nombre de cartes difficiles</span>
+                <div class="choice-row" id="weakLimitChoices">
+                  <button class="choice-chip" data-weak-limit="10" type="button">10</button>
+                  <button class="choice-chip active" data-weak-limit="20" type="button">20</button>
+                  <button class="choice-chip" data-weak-limit="30" type="button">30</button>
+                </div>
+                <p class="option-note">Classement : nombre d’erreurs d’abord, puis taux d’erreur.</p>
+              </div>
+
+              <div class="unit-progress-card">
+                <div>
+                  <span>Maîtrise de l’unité</span>
+                  <strong id="unitMasteryText">0 / 119</strong>
+                </div>
+                <div class="progress-track" aria-hidden="true"><span id="unitProgressBar"></span></div>
+              </div>
+
+              <button class="primary-button setup-start" id="startStudyButton" type="button">Commencer →</button>
+            </section>
+
+            <div class="streak-badge" id="streakBadge" hidden>🔥 <span id="streakCount">0</span> d'affilée</div>
+
+            <div class="deck" id="deck" aria-label="Paquet de cartes" hidden>
+              <div class="shadow-card shadow-card-3" aria-hidden="true"></div>
+              <div class="shadow-card shadow-card-2" aria-hidden="true"></div>
+              <div class="shadow-card shadow-card-1" aria-hidden="true"></div>
+
+              <button class="flashcard" id="flashcard" type="button" aria-label="Retourner la carte">
+                <span class="card-inner">
+                  <span class="card-face card-front">
+                    <span class="card-kicker" id="frontKicker">Français</span>
+                    <span class="card-word" id="frontWord">—</span>
+                    <span class="flip-hint">Clique pour retourner <span aria-hidden="true">↻</span></span>
+                  </span>
+                  <span class="card-face card-back">
+                    <span class="card-kicker" id="backKicker">English</span>
+                    <span class="card-word" id="backWord">—</span>
+                    <span class="flip-hint">À toi de décider</span>
+                  </span>
+                </span>
+              </button>
+            </div>
+
+            <div class="feedback-line" id="feedbackLine" aria-live="assertive" hidden>Retourne la carte, puis choisis.</div>
+
+            <div class="answer-actions" id="answerActions" hidden>
+              <button class="answer-button wrong" id="dontKnowButton" type="button" disabled>
+                <span class="answer-icon" aria-hidden="true">←</span>
+                <span>
+                  <small>Pas encore</small>
+                  <strong>Je ne sais pas</strong>
+                </span>
+              </button>
+
+              <button class="answer-button right" id="knowButton" type="button" disabled>
+                <span>
+                  <small>Oui !</small>
+                  <strong>Je sais</strong>
+                </span>
+                <span class="answer-icon" aria-hidden="true">→</span>
+              </button>
+            </div>
+
+            <div class="result-panel" id="resultPanel" hidden>
+              <div class="result-emoji" id="resultEmoji" aria-hidden="true">🎯</div>
+              <p class="eyebrow" id="resultEyebrow">Paquet terminé</p>
+              <h2 id="resultTitle">Bien joué !</h2>
+
+              <div class="score-grid">
+                <div class="score-box">
+                  <span>Premier passage</span>
+                  <strong id="firstPassScore">—</strong>
+                </div>
+                <div class="score-box accent">
+                  <span id="masteryLabel">Maîtrise du paquet</span>
+                  <strong id="masteryScore">—</strong>
+                </div>
+              </div>
+
+              <p class="result-copy" id="resultCopy"></p>
+              <p class="global-result" id="globalResult"></p>
+
+              <div class="result-actions four-actions">
+                <button class="primary-button" id="reviewMissedButton" type="button">Revoir les erreurs</button>
+                <button class="primary-button next-pack-button" id="nextPackResultButton" type="button">Paquet suivant →</button>
+                <button class="secondary-button" id="restartButton" type="button">↺ Recommencer ce paquet</button>
+                <button class="secondary-button" id="backToUnitButton" type="button">← Retour à l’unité</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pile-zone pile-zone-right" id="rightPileZone" aria-label="Pile Je sais" hidden>
+            <div class="pile-label">Je sais</div>
+            <div class="mini-pile success-pile" id="rightPile" aria-hidden="true"></div>
+            <div class="pile-count" id="rightPileCount">0 carte</div>
+          </div>
+        </section>
+
+        <footer class="footer-note">
+          <span>Les données restent sur cet appareil.</span>
+          <button id="resetStorageButton" type="button">Effacer la progression</button>
+        </footer>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="celebration-layer" id="celebrationLayer" aria-hidden="true"></div>
+
+    <script src="./src/app.bundle.js" defer></script>
+  </body>
+</html>
