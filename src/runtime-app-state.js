@@ -68,11 +68,19 @@ const elements = {
   resetStorageButton: $('resetStorageButton'),
 };
 
+function defaultDirectionForUnit(unit) {
+  return `${unit.sourceCode}-${unit.targetCode}`;
+}
+
+function reverseDirectionForUnit(unit) {
+  return `${unit.targetCode}-${unit.sourceCode}`;
+}
+
 function freshState(unitId = DEFAULT_UNIT_ID) {
   const unit = unitsById.get(unitId) || unitsById.get(DEFAULT_UNIT_ID);
   return {
     selectedUnitId: unit.id,
-    direction: 'fr-en',
+    direction: defaultDirectionForUnit(unit),
     settings: {
       sound: true,
       animations: true,
@@ -121,7 +129,9 @@ function loadState() {
 
     return {
       selectedUnitId: unit.id,
-      direction: saved.direction === 'en-fr' ? 'en-fr' : 'fr-en',
+      direction: [defaultDirectionForUnit(unit), reverseDirectionForUnit(unit)].includes(saved.direction)
+        ? saved.direction
+        : defaultDirectionForUnit(unit),
       settings: {
         sound: saved.settings?.sound !== false,
         animations: saved.settings?.animations !== false,
@@ -265,7 +275,10 @@ function renderHeader() {
   elements.breadcrumb.textContent = `${unit.languageLabel} · ${unit.label}`;
   elements.unitTitle.textContent = `${unit.label} · ${unit.cards.length} cartes`;
   elements.scopeSummary.textContent = state.study.setupVisible ? 'Choisis comment tu veux travailler.' : scopeLabel();
-  elements.directionLabel.textContent = state.direction === 'fr-en' ? 'FR → EN' : 'EN → FR';
+  const forward = state.direction === defaultDirectionForUnit(unit);
+  elements.directionLabel.textContent = forward
+    ? `${unit.sourceCode.toUpperCase()} → ${unit.targetCode.toUpperCase()}`
+    : `${unit.targetCode.toUpperCase()} → ${unit.sourceCode.toUpperCase()}`;
   elements.soundToggle.textContent = state.settings.sound ? '🔊' : '🔇';
   elements.soundToggle.classList.toggle('muted-setting', !state.settings.sound);
   elements.animationToggle.textContent = state.settings.animations ? '✨' : '◌';
@@ -351,11 +364,14 @@ function renderCard() {
   elements.answerActions.hidden = !studying || finished;
   if (!studying || !card || finished) return;
 
-  const frFirst = state.direction === 'fr-en';
-  elements.frontKicker.textContent = frFirst ? 'Français' : 'English';
-  elements.backKicker.textContent = frFirst ? 'English' : 'Français';
-  elements.frontWord.textContent = frFirst ? card.fr : card.en;
-  elements.backWord.textContent = frFirst ? card.en : card.fr;
+  const unit = currentUnit();
+  const forward = state.direction === defaultDirectionForUnit(unit);
+  const frontKey = forward ? unit.sourceKey : unit.targetKey;
+  const backKey = forward ? unit.targetKey : unit.sourceKey;
+  elements.frontKicker.textContent = forward ? unit.sourceLanguage : unit.targetLanguage;
+  elements.backKicker.textContent = forward ? unit.targetLanguage : unit.sourceLanguage;
+  elements.frontWord.textContent = card[frontKey];
+  elements.backWord.textContent = card[backKey];
 
   elements.flashcard.classList.toggle('is-flipped', state.flipped);
   elements.knowButton.disabled = !state.flipped || transitionLocked;
