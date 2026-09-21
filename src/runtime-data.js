@@ -8,6 +8,10 @@ const englishUnit1 = {
   label: 'Unité 1',
   sourceLanguage: 'Français',
   targetLanguage: 'English',
+  sourceCode: 'fr',
+  targetCode: 'en',
+  sourceKey: 'fr',
+  targetKey: 'en',
   cards: [
     ['to miss out on', 'passer à côté de'],
     ['nowadays', 'de nos jours, actuellement'],
@@ -135,6 +139,51 @@ const englishUnit1 = {
   })),
 };
 
+// ---- data/german/unit1.js ----
+const germanUnit1 = {
+  id: 'de-unit-1',
+  languageId: 'german',
+  languageLabel: 'Deutsch',
+  label: 'Unité 1',
+  sourceLanguage: 'Français',
+  targetLanguage: 'Deutsch',
+  sourceCode: 'fr',
+  targetCode: 'de',
+  sourceKey: 'fr',
+  targetKey: 'de',
+  cards: [
+    ['grüssen', 'saluer'],
+    ['(sich) begrüssen', '(se) saluer, se dire bonjour'],
+    ['der Gruss, ¨e', 'la salutation'],
+    ["Wie geht’s?", 'Comment ça va ?'],
+    ['auf Wiedersehen!', 'au revoir'],
+    ['die Bitte, n', 'la prière, la demande'],
+    ['bitten, bittet, bat, hat gebeten, jn. bitten +A um +A', 'prier, demander + inf.; demander qch. à qn.'],
+    ['bitte!', "s’il te plaît, s’il vous plaît"],
+    ['danke!', 'merci'],
+    ['danken +D für +A', 'remercier qn. de/pour qch.'],
+    ['gleichfalls, ebenfalls', 'de même'],
+    ['schenken', 'offrir'],
+    ['das Geschenk, e', 'le cadeau'],
+    ['gratulieren +D zu +D', 'féliciter qn. de qch.'],
+    ['(sich) entschuldigen', "(s’)excuser"],
+    ['die Entschuldigung, en', "l’excuse"],
+    ['die Ausrede, n', "l’excuse, le prétexte"],
+    ['Verzeihung!', 'pardon !'],
+    ['verzeihen, verzeiht, verzieh, hat verziehen', 'pardonner à qn.'],
+    ['leider', 'malheureusement'],
+    ['es tut mir leid', 'je suis désolé(e)'],
+    ['schade!', 'dommage'],
+    ['allein', 'seul'],
+    ['zusammen', 'ensemble'],
+    ['mit +D', 'avec'],
+  ].map(([de, fr], index) => ({
+    id: `de-u1-${String(index + 1).padStart(3, '0')}`,
+    de,
+    fr,
+  })),
+};
+
 // ---- data/catalog.js ----
 const catalog = [
   {
@@ -147,8 +196,7 @@ const catalog = [
     id: 'german',
     label: 'Deutsch',
     icon: '🇩🇪',
-    units: [],
-    comingSoon: true,
+    units: [germanUnit1],
   },
 ];
 
