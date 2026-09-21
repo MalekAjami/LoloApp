@@ -139,12 +139,12 @@ const englishUnit1 = {
   })),
 };
 
-// ---- data/german/unit1.js ----
+// ---- data/german/unit1-words.js ----
 const germanUnit1 = {
   id: 'de-unit-1',
   languageId: 'german',
   languageLabel: 'Deutsch',
-  label: 'Unité 1',
+  label: 'Unité 1 · Mots',
   sourceLanguage: 'Français',
   targetLanguage: 'Deutsch',
   sourceCode: 'fr',
@@ -158,7 +158,7 @@ const germanUnit1 = {
     ["Wie geht’s?", 'Comment ça va ?'],
     ['auf Wiedersehen!', 'au revoir'],
     ['die Bitte, n', 'la prière, la demande'],
-    ['bitten, bittet, bat, hat gebeten, jn. bitten +A um +A', 'prier, demander + inf.; demander qch. à qn.'],
+    ['bitten, bittet, bat, hat gebeten, bitten +A um +A', 'prier, demander de +inf.; demander qch. à qn.'],
     ['bitte!', "s’il te plaît, s’il vous plaît"],
     ['danke!', 'merci'],
     ['danken +D für +A', 'remercier qn. de/pour qch.'],
@@ -174,11 +174,45 @@ const germanUnit1 = {
     ['leider', 'malheureusement'],
     ['es tut mir leid', 'je suis désolé(e)'],
     ['schade!', 'dommage'],
-    ['allein', 'seul'],
-    ['zusammen', 'ensemble'],
-    ['mit +D', 'avec'],
   ].map(([de, fr], index) => ({
     id: `de-u1-${String(index + 1).padStart(3, '0')}`,
+    de,
+    fr,
+  })),
+};
+
+// ---- data/german/unit1-sentences.js ----
+const germanUnit1Sentences = {
+  id: 'de-unit-1-sentences',
+  languageId: 'german',
+  languageLabel: 'Deutsch',
+  label: 'Unité 1 · Phrases',
+  sourceLanguage: 'Français',
+  targetLanguage: 'Deutsch',
+  sourceCode: 'fr',
+  targetCode: 'de',
+  sourceKey: 'fr',
+  targetKey: 'de',
+  cards: [
+    ['Grüsse deine Eltern von mir.', 'Salue tes parents de ma part.'],
+    ['Wir haben uns schon begrüsst.', 'Nous nous sommes déjà salués.'],
+    ['Herzliche Grüsse!', 'Cordiales salutations!'],
+    ['Wie geht es dir? – Mir geht es gut.', 'Comment vas-tu? – Je vais bien.'],
+    ['Ich hätte eine Bitte.', 'J’aurais une demande.'],
+    ['Er hat mich gebeten, auf ihn zu warten.', 'Il m’a demandé de l’attendre.'],
+    ['Sie bat mich um Hilfe.', 'Elle me demanda de l’aide.'],
+    ['Er hat mir für meine Einladung gedankt.', 'Il m’a remercié pour mon invitation.'],
+    ['Guten Appetit! – Danke, gleichfalls.', 'Bon appétit! – Merci, pareillement.'],
+    ['Er hat mir ein Buch zum Geburtstag geschenkt.', 'Il m’a offert un livre pour mon anniversaire.'],
+    ['Sie hat mir zum Geburtstag gratuliert.', 'Elle m’a souhaité un joyeux anniversaire.'],
+    ['Ich möchte mich bei dir entschuldigen.', 'J’aimerais m’excuser auprès de toi.'],
+    ['Er findet immer Ausreden, wenn er zu spät kommt.', 'Il invente toujours des excuses quand il arrive en retard.'],
+    ['Verzeih mir, bitte!', 'Pardonne-moi, s’il te plaît!'],
+    ['Leider kann ich nicht kommen.', 'Malheureusement, je ne peux pas venir.'],
+    ['Es tut mir leid, dass ich nicht kommen kann.', 'Je suis désolé de ne pas pouvoir venir.'],
+    ['Schade, dass du nicht da warst!', 'Dommage que tu n’aies pas été là!'],
+  ].map(([de, fr], index) => ({
+    id: `de-u1-s-${String(index + 1).padStart(3, '0')}`,
     de,
     fr,
   })),
@@ -196,7 +230,7 @@ const catalog = [
     id: 'german',
     label: 'Deutsch',
     icon: '🇩🇪',
-    units: [germanUnit1],
+    units: [germanUnit1, germanUnit1Sentences],
   },
 ];
 
