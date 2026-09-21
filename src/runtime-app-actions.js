@@ -121,20 +121,31 @@ function backToUnit() {
 
 function selectUnit(unitId) {
   if (!unitsById.has(unitId) || unitId === state.selectedUnitId) return;
+  const nextState = freshState(unitId);
   state.selectedUnitId = unitId;
-  state.study = { ...freshState(unitId).study };
+  state.direction = nextState.direction;
+  state.study = { ...nextState.study };
   state.session = null;
   state.flipped = false;
   render();
 }
 
 function toggleDirection() {
-  state.direction = state.direction === 'fr-en' ? 'en-fr' : 'fr-en';
+  const unit = currentUnit();
+  const forwardDirection = defaultDirectionForUnit(unit);
+  const reverseDirection = reverseDirectionForUnit(unit);
+  state.direction = state.direction === forwardDirection ? reverseDirection : forwardDirection;
   state.study.setupVisible = true;
   state.study.activeCardIds = [];
   state.session = null;
   state.flipped = false;
-  showToast(state.direction === 'fr-en' ? 'Français → English' : 'English → Français', 'neutral');
+  const forward = state.direction === forwardDirection;
+  showToast(
+    forward
+      ? `${unit.sourceLanguage} → ${unit.targetLanguage}`
+      : `${unit.targetLanguage} → ${unit.sourceLanguage}`,
+    'neutral',
+  );
   render();
 }
 
