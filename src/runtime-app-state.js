@@ -246,12 +246,32 @@ function scopeLabel() {
 
 function renderTree() {
   elements.languageTree.innerHTML = catalog.map((language) => {
-    const units = language.units.map((unit) => `
-      <button class="tree-unit ${unit.id === state.selectedUnitId ? 'active' : ''}" data-unit-id="${unit.id}" type="button">
-        <span>${unit.label}</span>
-        <small>${unit.cards.length} cartes</small>
-      </button>
-    `).join('');
+    const groupedUnits = [];
+    language.units.forEach((unit) => {
+      const chapterLabel = unit.chapterLabel || '';
+      let group = groupedUnits.find((entry) => entry.chapterLabel === chapterLabel);
+      if (!group) {
+        group = { chapterLabel, units: [] };
+        groupedUnits.push(group);
+      }
+      group.units.push(unit);
+    });
+
+    const units = groupedUnits.map((group) => {
+      const buttons = group.units.map((unit) => `
+        <button class="tree-unit ${unit.id === state.selectedUnitId ? 'active' : ''}" data-unit-id="${unit.id}" type="button">
+          <span>${unit.label}</span>
+          <small>${unit.cards.length} cartes</small>
+        </button>
+      `).join('');
+
+      return group.chapterLabel
+        ? `<div class="tree-chapter">
+            <div class="tree-chapter-title">${group.chapterLabel}</div>
+            <div class="tree-chapter-units">${buttons}</div>
+          </div>`
+        : buttons;
+    }).join('');
 
     return `
       <section class="tree-language ${language.comingSoon ? 'muted' : ''}">
@@ -272,7 +292,8 @@ function renderTree() {
 
 function renderHeader() {
   const unit = currentUnit();
-  elements.breadcrumb.textContent = `${unit.languageLabel} · ${unit.label}`;
+  const unitContext = unit.chapterLabel || unit.languageLabel;
+  elements.breadcrumb.textContent = `${unit.languageLabel} · ${unitContext}`;
   elements.unitTitle.textContent = `${unit.label} · ${unit.cards.length} cartes`;
   elements.scopeSummary.textContent = state.study.setupVisible ? 'Choisis comment tu veux travailler.' : scopeLabel();
   const forward = state.direction === defaultDirectionForUnit(unit);
